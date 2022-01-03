@@ -1,25 +1,40 @@
-const repositoryName = '{conteudo da variavel dentro do html usa } '
+import { RepositoryItem } from "./RepositoryItem";
+import '../styles/repositories.scss';
+import { useState, useEffect } from "react";
+
+
+
 
 export function RepositoryList(){
+    const [repositories, setRepositories] = useState([]);
+
+    //quando mudar a variavel o useefect dispara a funcao e quando quer executar
+    //quando a variavel repositories mudar ele dispara useefect dependencias
+    // se [] vai executar uma uncia vez quando o componente for execibido em tela
+    useEffect(() => { 
+        fetch('https://api.github.com/users/fabiomicromais/repos')
+        .then(response => response.json())
+        .then(data => setRepositories(data))
+//        .then(data => console.log(data))
+    }, [repositories]);
+
     return(
         <section className="repository-list">
             <h1>Lista de repositorios</h1>
             <ul>
-                <li>
-                    <strong>{repositoryName } </strong>
-                    <p>descrição do repositorio</p>
-                    <a href="#">link do repositorio</a>
-                </li>
-                <li>
-                    <strong>Nome do repositorio</strong>
-                    <p>descrição do repositorio</p>
-                    <a href="#">link do repositorio</a>
-                </li>
-                <li>
-                    <strong>Nome do repositorio</strong>
-                    <p>descrição do repositorio</p>
-                    <a href="#">link do repositorio</a>
-                </li>
+                {
+                    //map()
+                 //map retorna algo //para cada repositorio retorne ()   
+                 // map(repository => ()) ou
+                 // map(repository => <direto o html > )
+                  //repositories.map(repository => <RepositoryItem key={repository.name} repository={repository} /> )
+                 //repositories.map(repository => (<RepositoryItem key={repository.name} repository={repository} /> ))
+                
+                repositories.map(repository => {
+                    return <RepositoryItem key={repository.name}
+                                    repository={repository} />
+                                 } 
+                   )}
             </ul>
         </section>
 

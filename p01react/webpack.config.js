@@ -2,6 +2,8 @@
 
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+
 
 const isDevelopment = process.env.NODE_ENV != 'production';
 
@@ -20,21 +22,28 @@ module.exports = {   //pega a saida do index e joga no bundle.js
    devServer: { //para não ficar rodando o yarn toda hora
        static: path.resolve(__dirname, 'public'),
        open: true,
-       port: 3000 
+       port: 3000,
+       hot: true,
    },
 
    plugins: [ //para injetar os arquivos do bundle.js
-       new HtmlWebpackPlugin({
+      isDevelopment && new ReactRefreshWebpackPlugin(),
+      new HtmlWebpackPlugin({
            template: path.resolve(__dirname, 'public','index.html')
        })
-    ],
+    ].filter(Boolean),
     module: {
         rules: [
             {
                 test: /\.(js|jsx)$/,  //converte todos arquivos terminados em .js ou .jsx fora do node-modules
                 exclude: /node_modules/, //usando o babel-loader para converter
-                use:  
-                      'babel-loader',
+                use: { 
+                     loader: 'babel-loader',
+                     options: {
+                        plugins: [ isDevelopment && require.resolve('react-refresh/babel')
+                        ].filter(Boolean)
+                        }
+                },
             },  
             {        
                 test: /\.scss$/,  //converte todos arquivos css 

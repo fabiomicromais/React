@@ -11,13 +11,13 @@ module.exports = {   //pega a saida do index e joga no bundle.js
    mode: isDevelopment ?  'development' : 'production',
    devtool: isDevelopment ? 'eval-source-map' : 'source-map',   //para visualizar o codigo original da aplicação, para mostrar a linha certa
 
-    entry:  path.resolve(__dirname,  'src', 'index.jsx'),
+    entry:  path.resolve(__dirname,  'src', 'index.tsx'),
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'bundle.js'
     },
    resolve: { 
-       extensions: ['.js', '.jsx'],
+       extensions: ['.js', '.jsx', '.ts', '.tsx'],
    },
    devServer: { //para não ficar rodando o yarn toda hora
        static: path.resolve(__dirname, 'public'),
@@ -35,7 +35,7 @@ module.exports = {   //pega a saida do index e joga no bundle.js
     module: {
         rules: [
             {
-                test: /\.(js|jsx)$/,  //converte todos arquivos terminados em .js ou .jsx fora do node-modules
+                test: /\.(j|t)sx$/,  //converte todos arquivos terminados em .js ou .jsx fora do node-modules
                 exclude: /node_modules/, //usando o babel-loader para converter
                 use: { 
                      loader: 'babel-loader',
